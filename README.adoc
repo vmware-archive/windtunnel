@@ -1,0 +1,24 @@
+= Kill Switch
+
+A Go program allowing you to hit the ``kill endpoint'' on https://github.com/cf-platform-eng/cf-scale-boot[CF Scale Boot] many times in parallel, allowing the simulation of catastrophic failure.
+
+== Usage
+
+* +-e+ = route to app on CF
+* +-i+ = number of requests to send
+
+=== Kill Command
+
+Hit the kill switch!
+
+----
+killswitch kill -e cf-scale-boot-ilka-farm.cfapps.io -i 40
+----
+
+==== Health Command
+
+Hit the health endpoint (useful for proving dead instances are removed from router)!
+
+----
+killswitch health -e cf-scale-boot-ilka-farm.cfapps.io -i 100
+----
