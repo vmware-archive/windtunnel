@@ -43,7 +43,6 @@ func health(c *cli.Context) {
 	healthy := 0
 
 	for i := 0; i < instances; i++ {
-		fmt.Printf("Killing instance %v...\n", i)
 		go func() {
 			resp, err := http.Get("http://" + endpoint + "/health")
 			if err != nil {
