@@ -12,11 +12,11 @@ import (
 
 func kill(c *cli.Context) {
 	endpoint := c.String("e")
-	instances := c.Int("i")
+	requests := c.Int("r")
 
 	done := make(chan bool)
 
-	for i := 0; i < instances; i++ {
+	for i := 0; i < requests; i++ {
 		fmt.Printf("Killing instance %v...\n", i)
 
 		// Use goroutines to kill instances in parallel!
@@ -32,19 +32,19 @@ func kill(c *cli.Context) {
 	}
 
 	// Allow all goroutines to finish executing.
-	for i := 0; i < instances; i++ {
+	for i := 0; i < requests; i++ {
 		<-done
 	}
 }
 
 func health(c *cli.Context) {
 	endpoint := c.String("e")
-	instances := c.Int("i")
+	requests := c.Int("r")
 
 	done := make(chan bool)
 	var healthy uint64 = 0
 
-	for i := 0; i < instances; i++ {
+	for i := 0; i < requests; i++ {
 		go func() {
 			resp, err := http.Get("http://" + endpoint + "/health")
 			if err != nil {
@@ -61,7 +61,7 @@ func health(c *cli.Context) {
 		}()
 	}
 
-	for i := 0; i < instances; i++ {
+	for i := 0; i < requests; i++ {
 		<-done
 	}
 	fmt.Printf("Healthy Requests: %v\n", atomic.LoadUint64(&healthy))
@@ -69,8 +69,8 @@ func health(c *cli.Context) {
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "killswitch"
-	app.Usage = "Kill CF applications with extreme prejudice!"
+	app.Name = "windtunnel"
+	app.Usage = "A tool for stress testing cloud application platforms."
 
 	app.Commands = []cli.Command{
 		{
@@ -84,9 +84,9 @@ func main() {
 					Usage: "endpoint that will kill the app",
 				},
 				cli.IntFlag{
-					Name:  "i",
+					Name:  "r",
 					Value: 1,
-					Usage: "number of instances to kill",
+					Usage: "number of requests to submit",
 				},
 			},
 		},
@@ -98,12 +98,12 @@ func main() {
 			Flags: []cli.Flag{
 				cli.StringFlag{
 					Name:  "e",
-					Usage: "endpoint that will kill the app",
+					Usage: "endpoint that will provide a health indicator",
 				},
 				cli.IntFlag{
-					Name:  "i",
+					Name:  "r",
 					Value: 1,
-					Usage: "number of instances to kill",
+					Usage: "number of requests to submit",
 				},
 			},
 		},

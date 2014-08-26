@@ -1,18 +1,18 @@
-= Kill Switch
+= Wind Tunnel
 
-A Go program allowing you to hit the ``kill endpoint'' on https://github.com/cf-platform-eng/cf-scale-boot[CF Scale Boot] many times in parallel, allowing the simulation of catastrophic failure.
+A tool for stress testing cloud application platforms.
 
 == Usage
 
-* +-e+ = route to app on CF
-* +-i+ = number of requests to send
+* +-e+ = route to app on platform
+* +-r+ = number of requests to submit
 
 === Kill Command
 
 Hit the kill switch!
 
 ----
-killswitch kill -e cf-scale-boot-ilka-farm.cfapps.io -i 40
+windtunnel kill -e cf-scale-boot-ilka-farm.cfapps.io -r 40
 ----
 
 ==== Health Command
@@ -20,5 +20,5 @@ killswitch kill -e cf-scale-boot-ilka-farm.cfapps.io -i 40
 Hit the health endpoint (useful for proving dead instances are removed from router)!
 
 ----
-killswitch health -e cf-scale-boot-ilka-farm.cfapps.io -i 100
+windtunnel health -e cf-scale-boot-ilka-farm.cfapps.io -r 100
 ----
