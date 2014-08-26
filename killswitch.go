@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"runtime"
+	"sync/atomic"
 
 	"github.com/codegangsta/cli"
 )
@@ -40,7 +42,7 @@ func health(c *cli.Context) {
 	instances := c.Int("i")
 
 	done := make(chan bool)
-	healthy := 0
+	var healthy uint64 = 0
 
 	for i := 0; i < instances; i++ {
 		go func() {
@@ -51,7 +53,8 @@ func health(c *cli.Context) {
 				fmt.Printf("Response: %v\n", resp.Status)
 
 				if resp.StatusCode == 200 {
-					healthy++
+					atomic.AddUint64(&healthy, 1)
+					runtime.Gosched()
 				}
 			}
 			done <- true
@@ -61,7 +64,7 @@ func health(c *cli.Context) {
 	for i := 0; i < instances; i++ {
 		<-done
 	}
-	fmt.Printf("Healthy Requests: %v\n", healthy)
+	fmt.Printf("Healthy Requests: %v\n", atomic.LoadUint64(&healthy))
 }
 
 func main() {
