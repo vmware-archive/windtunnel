@@ -8,6 +8,7 @@ import (
 	"sync/atomic"
 
 	"github.com/cf-platform-eng/windtunnel/plugin"
+	"github.com/cf-platform-eng/windtunnel/plugin/cloudfoundry"
 	"github.com/cf-platform-eng/windtunnel/plugin/heroku"
 	"github.com/codegangsta/cli"
 )
@@ -78,6 +79,8 @@ func status(c *cli.Context) {
 	switch platform {
 	case "heroku":
 		plugin = new(heroku.Plugin)
+	case "cf":
+		plugin = new(cloudfoundry.Plugin)
 	}
 
 	token := plugin.Authenticate()
@@ -135,7 +138,7 @@ func main() {
 			Flags: []cli.Flag{
 				cli.StringFlag{
 					Name:  "p",
-					Usage: "target platform. Supported values currently: [heroku]",
+					Usage: "target platform. Supported values currently: [heroku, cf]",
 				},
 				cli.StringFlag{
 					Name:  "a",
