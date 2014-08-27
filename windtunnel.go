@@ -83,8 +83,8 @@ func status(c *cli.Context) {
 	token := plugin.Authenticate()
 	status := plugin.Status(token, app)
 
-	fmt.Printf("Application (%v) status: [%v running / %v total]", app, status[0], status[1])
-	fmt.Println()
+	fmt.Printf("Application (%v) status: [%v running / %v total]\n", app, status[0], status[1])
+	// fmt.Println()
 }
 
 func main() {
