@@ -1,5 +1,6 @@
 package plugin
 
-type Statuser interface {
+type Plugin interface {
+	Authenticate() string
 	Status(token string, app string) []int
 }

@@ -9,7 +9,7 @@ import (
 	"os/exec"
 )
 
-type HerokuPlugin struct {
+type Plugin struct {
 }
 
 type dyno struct {
@@ -20,7 +20,7 @@ func (this dyno) String() string {
 	return this.State
 }
 
-func (this *HerokuPlugin) Authenticate() string {
+func (this *Plugin) Authenticate() string {
 	out, err := exec.Command("heroku", "auth:token").Output()
 
 	if err != nil {
@@ -31,7 +31,7 @@ func (this *HerokuPlugin) Authenticate() string {
 	return base64.StdEncoding.EncodeToString([]byte(withColon))
 }
 
-func (this *HerokuPlugin) Status(token string, app string) []int {
+func (this *Plugin) Status(token string, app string) []int {
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", "https://api.heroku.com/apps/"+app+"/dynos", nil)
 	req.Header.Add("Accept", "application/vnd.heroku+json; version=3")

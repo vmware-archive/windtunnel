@@ -6,16 +6,16 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("HerokuPlugin", func() {
+var _ = Describe("Plugin", func() {
 	It("Should Return My Heroku Oauth Token", func() {
-		heroku := new(HerokuPlugin)
+		heroku := new(Plugin)
 
 		token := heroku.Authenticate()
 		Ω(token).ShouldNot(BeZero())
 	})
 
 	It("Should Return App Status", func() {
-		heroku := new(HerokuPlugin)
+		heroku := new(Plugin)
 		token := heroku.Authenticate()
 
 		Ω(heroku.Status(token, "lit-wave-5074")).Should(Equal([]int{1, 1}))

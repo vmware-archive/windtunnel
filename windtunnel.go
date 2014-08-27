@@ -7,6 +7,8 @@ import (
 	"runtime"
 	"sync/atomic"
 
+	"github.com/cf-platform-eng/windtunnel/plugin"
+	"github.com/cf-platform-eng/windtunnel/plugin/heroku"
 	"github.com/codegangsta/cli"
 )
 
@@ -67,6 +69,24 @@ func health(c *cli.Context) {
 	fmt.Printf("Healthy Requests: %v\n", atomic.LoadUint64(&healthy))
 }
 
+func status(c *cli.Context) {
+	platform := c.String("p")
+	app := c.String("a")
+
+	var plugin plugin.Plugin
+
+	switch platform {
+	case "heroku":
+		plugin = new(heroku.Plugin)
+	}
+
+	token := plugin.Authenticate()
+	status := plugin.Status(token, app)
+
+	fmt.Printf("Application (%v) status: [%v running / %v total]", app, status[0], status[1])
+	fmt.Println()
+}
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "windtunnel"
@@ -104,6 +124,22 @@ func main() {
 					Name:  "r",
 					Value: 1,
 					Usage: "number of requests to submit",
+				},
+			},
+		},
+		{
+			Name:      "status",
+			ShortName: "s",
+			Usage:     "ask the platform for application instance status",
+			Action:    status,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "p",
+					Usage: "target platform. Supported values currently: [heroku]",
+				},
+				cli.StringFlag{
+					Name:  "a",
+					Usage: "application name",
 				},
 			},
 		},
