@@ -4,21 +4,35 @@ A tool for stress testing cloud application platforms.
 
 == Usage
 
-* +-e+ = route to app on platform
-* +-r+ = number of requests to submit
-
 === Kill Command
 
 Hit the kill switch!
+
+* +-e+ = route to app on platform
+* +-r+ = number of requests to submit
 
 ----
 windtunnel kill -e cf-scale-boot-ilka-farm.cfapps.io -r 40
 ----
 
-==== Health Command
+=== Health Command
 
 Hit the health endpoint (useful for proving dead instances are removed from router)!
 
+* +-e+ = route to app on platform
+* +-r+ = number of requests to submit
+
 ----
 windtunnel health -e cf-scale-boot-ilka-farm.cfapps.io -r 100
+----
+
+=== Status Command
+
+Obtain the current status for an application. Provides the number of instances in a RUNNING state.
+
+* +-p+ = target platform. Currently supports [+heroku+,+cf+]
+* +-a+ = application. Specific to platform. For Heroku it is the application name, for CF it is the application GUID.
+
+----
+windtunnel status -p heroku -a lit-wave-5074
 ----
