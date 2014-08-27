@@ -28,7 +28,7 @@ windtunnel health -e cf-scale-boot-ilka-farm.cfapps.io -r 100
 
 === Status Command
 
-Obtain the current status for an application. Provides the number of instances in a RUNNING state.
+Obtain the current status for an application. Provides the number of instances in a RUNNING state. You must be authenticated with the target platform using it's native CLI.
 
 * +-p+ = target platform. Currently supports [+heroku+,+cf+]
 * +-a+ = application. Specific to platform. For Heroku it is the application name, for CF it is the application GUID.
