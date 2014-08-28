@@ -45,6 +45,8 @@ func (this *Plugin) Status(token string, app string) []int {
 	var instances map[string]Instance
 	err := json.Unmarshal(instanceJson, &instances)
 	if err != nil {
+    log.Println("Cannot marshall instance status:")
+    log.Println("JSON: " + string(instanceJson))
 		log.Fatal(err)
 	}
 
